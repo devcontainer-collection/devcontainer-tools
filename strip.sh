@@ -66,8 +66,8 @@ fi
 
 # --- Resolve OS/ARCH from triple if provided ---
 if [ -n "$TARGET_TRIPLE" ]; then
-  # e.g. aarch64-unknown-linux-gnu → aarch64 + linux
-  IFS='-' read -r ARCH OS ABI <<< "$TARGET_TRIPLE"
+  # Handle 3 or 4 part triples: <arch>-<vendor>-<os>-<abi>
+  IFS='-' read -r ARCH VENDOR OS ABI <<< "$TARGET_TRIPLE"
 fi
 
 if [ -z "$OS" ] || [ -z "$ARCH" ]; then
@@ -85,8 +85,8 @@ case "$OS" in
   linux)
     case "$ARCH" in
       x86_64)   strip_cmd="x86_64-linux-gnu-strip" ;;
-      aarch64)  strip_cmd="aarch64-linux-gnu-strip" ;;  # Raspberry Pi 4/5 64bit
-      armv7 | armv7a | arm) strip_cmd="arm-linux-gnueabihf-strip" ;;  # Raspberry Pi 2/3 32bit
+      aarch64)  strip_cmd="aarch64-linux-gnu-strip" ;;
+      armv7 | armv7a | arm) strip_cmd="arm-linux-gnueabihf-strip" ;;
     esac
     ;;
   windows)
@@ -108,7 +108,7 @@ case "$OS" in
 esac
 
 if [ -z "$strip_cmd" ]; then
-  echo "$strip_cmd not exist.\nUnsupported architecture: $ARCH for OS: $OS"
+  echo "Unsupported architecture: $ARCH for OS: $OS"
   exit 1
 fi
 
