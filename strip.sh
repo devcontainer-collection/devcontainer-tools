@@ -95,7 +95,7 @@ case "$OS" in
       aarch64)  strip_cmd="aarch64-w64-mingw32-strip" ;;
     esac
     ;;
-  macos)
+  macos | darwin)
     echo "[strip] Automatic stripping for macOS is not supported in this script."
     echo "[strip] Please run 'strip \"$BIN\"' directly on your macOS host system."
     echo "[strip] Refer to the macOS developer documentation for more details: https://developer.apple.com/documentation/command_line_tools/strip"
